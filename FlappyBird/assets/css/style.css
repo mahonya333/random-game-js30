@@ -140,4 +140,44 @@ input[placeholder] {
   border: 3px solid #4f9cb6;
 }
 
+.top-results {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  background-color: #dbda96;
+  border-left: 3px solid #4f9cb6;
+  padding: 20px;
+}
 
+.top-results__title {
+  margin-bottom: 40px;
+  font-size: 22px;
+  font-weight: 600;
+  font-family: sans-serif;
+  text-align: center;
+  color: #193656;
+}
+
+.top-results__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1 0 auto;
+}
+
+.top-results__list-item {
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: #0a3951;
+}
+
+.reload-game__btn {
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid #0a3951;
+  border-radius: 6px;
+  font-size: 20px;
+  color: #46b163;
+}
