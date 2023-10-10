@@ -1,0 +1,38 @@
+.footer {
+    border-top: 2px solid #26465c;
+    box-shadow: 0 0 20px 2px #08081f;
+    padding: 10px 0;
+    background: radial-gradient(at 40px 40px, #3ee2ff 0%, #26465c 50%, #08081f 90%);
+}
+
+.footer__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer__github {
+    display: flex;
+    align-items: center;
+}
+
+.footer__github:hover .footer__github-icon {
+    fill: #82b7b5;
+}
+
+.footer__github:hover .footer__github-username {
+    color: #82b7b5;
+}
+
+.footer__github-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.footer__github-username {
+    color: #000;
+    transition: all 0.3s ease-in-out;
+}
