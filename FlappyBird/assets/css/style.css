@@ -121,3 +121,23 @@ input[placeholder] {
   padding-right: 20px;
 }
 
+.main {
+  flex: 1 0 auto;
+  padding: 20px;
+  background-color: #0a3951;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.main__inner {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  border-radius: 17px;
+  overflow: hidden;
+  box-shadow: 0 0 10px 3px #4f9cb6;
+  border: 3px solid #4f9cb6;
+}
+
+
