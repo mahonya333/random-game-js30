@@ -29,4 +29,50 @@ window.addEventListener("DOMContentLoaded", () => {
     fg.src = "./assets/img/fg.png";
     pipeUp.src = "./assets/img/pipeUp.png";
     pipeBottom.src = "./assets/img/pipeBottom.png";
+
+      /* Слушатель отслеживает клики по клавишам */
+  document.addEventListener("keydown", function (event) {
+    let keyCode = event.keyCode;
+
+    if (keyCode === 32 || keyCode === 87) {
+      moveUp();
+    }
+
+    if (keyCode === 65) {
+      moveLeft();
+    }
+
+    if (keyCode === 68) {
+      moveRight();
+    }
+
+    if (keyCode === 83) {
+      moveDown();
+    }
+  });
+
+  btnReloadGame.addEventListener("click", function () {
+    location.reload();
+  });
+
+  function moveUp() {
+    yBirdPosition -= 25;
+    fly.play();
+  }
+
+  function moveLeft() {
+    xBirdPosition -= 25;
+    fly.play();
+  }
+
+  function moveRight() {
+    xBirdPosition += 25;
+    fly.play();
+  }
+
+  function moveDown() {
+    yBirdPosition += 25;
+    fly.play();
+    cancelAnimationFrame(draw);
+  }
   });
