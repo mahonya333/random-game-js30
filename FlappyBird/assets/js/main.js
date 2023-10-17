@@ -36,6 +36,13 @@ window.addEventListener("DOMContentLoaded", () => {
   pipeUp.src = "./assets/img/pipeUp.png";
   pipeBottom.src = "./assets/img/pipeBottom.png";
 
+  // Проверяем, есть ли уже лучшие результаты в localStorage
+  if (localStorage.getItem("bestScores")) {
+    bestScores = JSON.parse(localStorage.getItem("bestScores"));
+  }
+
+  showBestScores();
+
   /* Слушатель отслеживает клики по клавишам */
   document.addEventListener("keydown", function (event) {
     let keyCode = event.keyCode;
@@ -58,11 +65,17 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   btnReloadGame.addEventListener("click", function () {
+    cancelAnimationFrame(draw);
     location.reload();
   });
 
   function moveUp() {
     yBirdPosition -= 25;
+    fly.play();
+  }
+
+  function moveDown() {
+    yBirdPosition += 25;
     fly.play();
   }
 
@@ -76,14 +89,10 @@ window.addEventListener("DOMContentLoaded", () => {
     fly.play();
   }
 
-  function moveDown() {
-    yBirdPosition += 25;
-    fly.play();
-    cancelAnimationFrame(draw);
-  }
-
   function draw() {
     ctx.drawImage(bg, 0, 0, cvs.width, cvs.height);
+
+    yBirdPosition += birdGravitation;
 
     for (let i = 0; i < pipesArray.length; i++) {
       ctx.drawImage(pipeUp, pipesArray[i].x, pipesArray[i].y);
@@ -111,8 +120,9 @@ window.addEventListener("DOMContentLoaded", () => {
         yBirdPosition + bird.height >= cvs.height - fg.height ||
         yBirdPosition < 0
       ) {
+        showVinnerMessage();
         saveBestScores();
-        location.reload();
+        return;
       }
 
       if (pipesArray[i].x == 5) {
@@ -124,24 +134,9 @@ window.addEventListener("DOMContentLoaded", () => {
     ctx.drawImage(fg, 0, cvs.height - fg.height + 8, cvs.width, fg.height);
     ctx.drawImage(bird, xBirdPosition, yBirdPosition);
 
-    yBirdPosition += birdGravitation;
-
     ctx.fillStyle = "#000";
     ctx.font = "20px Verdana";
     ctx.fillText("Счет: " + score, 10, cvs.height);
-
-    // Проверяем, есть ли уже лучшие результаты в localStorage
-    if (localStorage.getItem("bestScores")) {
-      bestScores = JSON.parse(localStorage.getItem("bestScores"));
-    }
-
-    showBestScores();
-
-    if (score >= 10) {
-      showVinnerMessage();
-      saveBestScores();
-      return;
-    }
 
     requestAnimationFrame(draw);
   }
@@ -171,36 +166,24 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function showVinnerMessage() {
-    // Текст, который будет внутри прямоугольника
-    const text = `Вы набрали максимальное количество очков \n
-      Ваш результат: ${score}`;
-
-    // Разбиваем текст на строки
-    const lines = text.split("\n");
-
-    // Вычисляем высоту каждой строки и общую высоту текста
-    const lineHeight = 25; // Высота каждой строки (может быть изменена)
-    const textHeight = lines.length * lineHeight;
+    const text = `Ваш результат: ${score}`;
 
     // Вычисляем ширину самой широкой строки текста
     let maxWidth = 0;
 
-    for (const line of lines) {
-      const lineMetrics = ctx.measureText(line);
-      maxWidth = Math.max(maxWidth, lineMetrics.width);
-    }
+    const lineMetrics = ctx.measureText(text);
+    maxWidth = Math.max(maxWidth, lineMetrics.width);
 
     // Размеры прямоугольника
-    const rectWidth = maxWidth + 40; // Ширина прямоугольника с отступами
-    const rectHeight = textHeight + 40; // Высота прямоугольника с отступами
+    const rectWidth = cvs.width; // Ширина прямоугольника с отступами
+    const rectHeight = cvs.height; // Высота прямоугольника с отступами
 
     // Центрируем прямоугольник
     const rectX = (cvs.width - rectWidth) / 2; // Центрирование по горизонтали
-    const rectY = (cvs.height - rectHeight) / 2; // Центрирование по вертикали
 
     // Отображаем прямоугольник
     ctx.fillStyle = "#ffc10e";
-    ctx.fillRect(rectX, rectY, rectWidth, rectHeight);
+    ctx.fillRect(0, 0, rectWidth, rectHeight);
 
     /* стили результирующего текста */
     ctx.fillStyle = "#000";
@@ -209,14 +192,9 @@ window.addEventListener("DOMContentLoaded", () => {
     ctx.textBaseline = "middle"; // Выравнивание по центру
 
     // Рассчитываем координаты для центрирования текста по вертикали
-    let currentY = rectY + 20; // Отступ сверху
-
-    for (const line of lines) {
-      const lineMetrics = ctx.measureText(line);
-      const textX = rectX + rectWidth / 2;
-      ctx.fillText(line, textX, currentY);
-      currentY += lineHeight;
-    }
+    let currentY = cvs.height / 2; // Отступ сверху
+    const textX = rectX + rectWidth / 2;
+    ctx.fillText(text, textX, currentY);
   }
 
   pipeBottom.onload = draw;
